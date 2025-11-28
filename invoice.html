@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>الشرقاوي للفواتير والطلبات</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root{
+      --bg:#050014;
+      --panel:#0b1020;
+      --panel-soft:#111827;
+      --gold:#facc6b;
+      --blue:#38bdf8;
+      --muted:#9ca3af;
+      --danger:#ef4444;
+      --success:#22c55e;
+    }
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:"Cairo", system-ui, sans-serif;
+    }
+    body{
+      background:
+        radial-gradient(circle at 0% 0%, #1e293b 0, transparent 55%),
+        radial-gradient(circle at 100% 100%, #4c1d95 0, transparent 55%),
+        var(--bg);
+      color:#f9fafb;
+      min-height:100vh;
+    }
+    .app{
+      max-width:1200px;
+      margin:20px auto 40px;
+      padding:16px;
+    }
+    header{
+      background:linear-gradient(135deg,#020617,#020617,#111827);
+      border-radius:18px;
+      padding:16px 18px;
+      border:1px solid rgba(148,163,184,.6);
+      box-shadow:0 0 28px #020617;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .brand-logo{
+      width:54px;
+      height:54px;
+      border-radius:50%;
+      background:#020617;
+      border:2px solid var(--gold);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      box-shadow:0 0 18px rgba(250,204,107,.7);
+    }
+    .brand-logo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    .brand-text h1{
+      font-size:22px;
+      color:var(--gold);
+    }
+    .brand-text h2{
+      font-size:13px;
+      color:var(--blue);
+    }
+    .nav-tabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .nav-btn{
+      padding:7px 14px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,.8);
+      background:#020617;
+      color:#e5e7eb;
+      font-size:13px;
+      cursor:pointer;
+      transition:.2s;
+    }
+    .nav-btn.active{
+      background:linear-gradient(135deg,var(--gold),var(--blue));
+      color:#020617;
+      border-color:var(--gold);
+      box-shadow:0 0 16px rgba(250,204,107,.7);
+    }
+
+    main{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width:900px){
+      main{
+        grid-template-columns:1fr;
+      }
+    }
+
+    section{
+      background:rgba(15,23,42,.95);
+      border-radius:18px;
+      border:1px solid rgba(148,163,184,.6);
+      padding:14px 14px 18px;
+      box-shadow:0 0 22px #020617;
+    }
+    section.hidden{display:none;}
+
+    .sec-title{
+      font-size:16px;
+      color:var(--gold);
+      margin-bottom:6px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .sec-sub{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+    .badge{
+      font-size:10px;
+      color:#020617;
+      background:var(--blue);
+      padding:2px 7px;
+      border-radius:999px;
+    }
+
+    label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:2px;
+    }
+    input, select{
+      width:100%;
+      padding:7px;
+      border-radius:10px;
+      border:1px solid rgba(148,163,184,.7);
+      background:#020617;
+      color:#e5e7eb;
+      font-size:12px;
+      margin-bottom:6px;
+      outline:none;
+    }
+    input:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 1px rgba(56,189,248,.5);
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:8px;
+    }
+    @media (max-width:600px){
+      .row{
+        grid-template-columns:1fr;
+      }
+    }
+    .btn{
+      border:none;
+      border-radius:10px;
+      padding:7px 12px;
+      font-size:12px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      margin-top:4px;
+    }
+    .btn-main{
+      background:linear-gradient(135deg,var(--gold),var(--blue));
+      color:#020617;
+      font-weight:700;
+      box-shadow:0 0 16px rgba(250,204,107,.6);
+    }
+    .btn-ghost{
+      background:transparent;
+      color:var(--muted);
+      border:1px solid rgba(148,163,184,.7);
+    }
+    .btn-danger{
+      background:var(--danger);
+      color:#f9fafb;
+    }
+
+    .table-wrap{
+      margin-top:10px;
+      max-height:260px;
+      overflow:auto;
+      border-radius:12px;
+      border:1px solid rgba(55,65,81,.9);
+      background:#020617;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+    }
+    th,td{
+      padding:6px 8px;
+      border-bottom:1px solid rgba(31,41,55,.9);
+      text-align:center;
+    }
+    th{
+      background:#020617;
+      position:sticky;
+      top:0;
+      z-index:1;
+      font-weight:600;
+      color:#e5e7eb;
+    }
+    tbody tr:nth-child(even){
+      background:#020617;
+    }
+    tbody tr:nth-child(odd){
+      background:#030712;
+    }
+    td input{
+      margin:0;
+      padding:3px 5px;
+      font-size:11px;
+    }
+    .tag{
+      display:inline-block;
+      font-size:10px;
+      padding:2px 6px;
+      border-radius:999px;
+      background:rgba(55,65,81,.9);
+      color:var(--muted);
+    }
+    .stock-low{
+      color:#f97316;
+      font-size:11px;
+    }
+
+    /* search wrapper */
+    .search-wrap{
+      position:relative;
+    }
+    .search-wrap input{
+      padding-inline-end:26px;
+    }
+    .search-wrap::before{
+      content:"🔍";
+      position:absolute;
+      inset-inline-end:8px;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:12px;
+      opacity:.7;
+      pointer-events:none;
+    }
+
+    .invoice-header{
+      background:#020617;
+      border-radius:14px;
+      border:1px solid rgba(148,163,184,.7);
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+    .invoice-brand{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .invoice-brand-main{
+      font-size:18px;
+      color:var(--gold);
+      font-weight:800;
+    }
+    .invoice-brand-sub{
+      font-size:11px;
+      color:var(--blue);
+    }
+    .invoice-icons{
+      display:flex;
+      gap:6px;
+    }
+    .invoice-icons img{
+      width:32px;
+      height:32px;
+      object-fit:cover;
+      border-radius:50%;
+      border:1px solid rgba(148,163,184,.6);
+    }
+    .invoice-meta{
+      text-align:left;
+      font-size:11px;
+      color:var(--muted);
+    }
+    .invoice-meta span{
+      color:var(--gold);
+    }
+
+    .invoice-meta2{
+      margin:6px 2px 10px;
+      padding:6px 8px;
+      border-radius:10px;
+      border:1px solid rgba(55,65,81,.8);
+      background:#020617;
+      font-size:11px;
+      color:var(--muted);
+      display:grid;
+      gap:2px;
+    }
+    .invoice-meta2 span{
+      color:#e5e7eb;
+      font-weight:500;
+    }
+
+    .totals{
+      margin-top:8px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      font-size:13px;
+    }
+    .totals strong{
+      color:var(--gold);
+      font-size:15px;
+    }
+
+    .history-list{
+      margin-top:10px;
+      max-height:260px;
+      overflow:auto;
+      border-radius:12px;
+      border:1px solid rgba(55,65,81,.9);
+      background:#020617;
+      font-size:12px;
+    }
+    .history-item{
+      padding:7px 9px;
+      border-bottom:1px solid rgba(31,41,55,.9);
+      cursor:pointer;
+    }
+    .history-item:hover{
+      background:#111827;
+    }
+
+    .print-note{
+      font-size:10px;
+      color:var(--muted);
+      margin-top:4px;
+    }
+
+    .signature-box{
+      margin-top:16px;
+      text-align:left;
+      font-size:12px;
+      color:var(--muted);
+      border-top:1px solid rgba(55,65,81,.8);
+      padding-top:8px;
+    }
+    .signature-name{
+      font-size:18px;
+      margin-top:4px;
+      color:var(--gold);
+      font-family:"Scheherazade", "Cairo", cursive;
+    }
+    .signature-phone{
+      font-size:11px;
+      margin-top:2px;
+      color:var(--muted);
+    }
+
+    .screen-only{display:inline-block;}
+    .print-only{display:none;}
+
+    @media print{
+      body{
+        background:#fff;
+      }
+      .app{
+        margin:0;
+        padding:0;
+      }
+      header, #productsSection, #historySection{
+        display:none !important;
+      }
+      #invoiceSection{
+        box-shadow:none;
+        border:none;
+        padding:0;
+      }
+      .invoice-header{
+        border:1px solid #000;
+      }
+      .table-wrap{
+        max-height:none;
+      }
+      .btn, .screen-only, .print-note{
+        display:none !important;
+      }
+      .print-only{
+        display:inline-block !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="brand-logo">
+          <img src="appliances.jpg" alt="الشرقاوي للأجهزة" onerror="this.style.display='none'">
+        </div>
+        <div class="brand-text">
+          <h1>الشرقاوي</h1>
+          <h2>للأدوات المنزلية وتجهيز العرائس</h2>
+        </div>
+      </div>
+      <div class="nav-tabs">
+        <button class="nav-btn active" data-target="productsSection">إدارة الأصناف</button>
+        <button class="nav-btn" data-target="invoiceSection">إنشاء فاتورة</button>
+        <button class="nav-btn" data-target="historySection">سجل الفواتير</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- إدارة الأصناف -->
+      <section id="productsSection">
+        <div class="sec-title">
+          إدارة الأصناف
+          <span class="badge">مخزون المحل</span>
+        </div>
+        <p class="sec-sub">أضف أو عدّل أو احذف أي صنف (اسم – كود – سعر – كمية مخزون) لتسهيل الشغل في الفواتير.</p>
+
+        <div class="row">
+          <div>
+            <label for="pCode">كود الصنف</label>
+            <input id="pCode" type="text" placeholder="مثال: 101 أو WM-01">
+          </div>
+          <div>
+            <label for="pName">اسم الصنف</label>
+            <input id="pName" type="text" placeholder="غسالة فول أوتوماتيك 10ك">
+          </div>
+          <div>
+            <label for="pPrice">السعر (جنيه)</label>
+            <input id="pPrice" type="number" min="0" step="0.01" placeholder="مثال: 9500">
+          </div>
+          <div>
+            <label for="pStock">الكمية بالمخزون</label>
+            <input id="pStock" type="number" min="0" step="1" placeholder="مثال: 5">
+          </div>
+        </div>
+
+        <button class="btn btn-main" id="btnSaveProduct">حفظ/تحديث الصنف</button>
+        <button class="btn btn-ghost" id="btnClearProduct">تفريغ الحقول</button>
+
+        <div style="margin-top:8px;" class="row">
+          <div class="search-wrap">
+            <label for="pSearch">بحث عن صنف</label>
+            <input id="pSearch" type="text" placeholder="ابحث بالاسم أو الكود">
+          </div>
+          <div style="grid-column:span 3;">
+            <span style="font-size:11px;color:var(--muted);display:block;margin-top:18px;">
+              ملاحظة: البيانات محفوظة تلقائياً على هذا الجهاز (LocalStorage).
+            </span>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>كود</th>
+                <th>الاسم</th>
+                <th>المخزون</th>
+                <th>السعر</th>
+                <th>إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- إنشاء فاتورة -->
+      <section id="invoiceSection" class="hidden">
+        <div class="invoice-header">
+          <div class="invoice-brand">
+            <div>
+              <div class="invoice-brand-main">الشرقاوي</div>
+              <div class="invoice-brand-sub">للأدوات المنزلية وتجهيز العرائس</div>
+            </div>
+            <div class="invoice-icons">
+              <img src="kitchen-banner.jpg" alt="" onerror="this.style.display='none'">
+              <img src="wedding.png" alt="" onerror="this.style.display='none'">
+            </div>
+          </div>
+          <div class="invoice-meta">
+            <div>رقم الفاتورة: <span id="invoiceNo">-</span></div>
+            <div>التاريخ: <span id="invoiceDate"></span></div>
+          </div>
+        </div>
+
+        <div class="invoice-meta2">
+          <div>اسم العميل: <span id="metaCustName">-</span></div>
+          <div>رقم الهاتف: <span id="metaCustPhone">-</span></div>
+          <div>ملاحظات: <span id="metaNotes">-</span></div>
+        </div>
+
+        <p class="sec-sub screen-only">اكتب كود الصنف لإضافته للفاتورة، ثم عدّل الكمية أو السعر حسب الطلب.</p>
+
+        <div class="row">
+          <div>
+            <label for="invCode">كود الصنف</label>
+            <input id="invCode" type="text" placeholder="كود من قائمة الأصناف">
+          </div>
+          <div>
+            <label>إضافة للصنف</label>
+            <button class="btn btn-main" id="btnAddToInvoice">إضافة للفاتورة</button>
+          </div>
+          <div class="search-wrap">
+            <label for="invSearch">بحث في الفاتورة</label>
+            <input id="invSearch" type="text" placeholder="بحث بالاسم أو الكود">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:8px;">
+          <div>
+            <label for="customerName">اسم العميل</label>
+            <input id="customerName" type="text" placeholder="مثال: أحمد محمد">
+          </div>
+          <div>
+            <label for="customerPhone">رقم الهاتف</label>
+            <input id="customerPhone" type="text" placeholder="مثال: 0100 000 0000">
+          </div>
+          <div>
+            <label for="invoiceNotes">ملاحظات</label>
+            <input id="invoiceNotes" type="text" placeholder="مثال: توصيل بعد أسبوع / خصم خاص">
+          </div>
+          <div></div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>كود</th>
+                <th>البيان</th>
+                <th>سعر الوحدة</th>
+                <th>الكمية</th>
+                <th>الإجمالي</th>
+                <th>حذف</th>
+              </tr>
+            </thead>
+            <tbody id="invoiceTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="totals">
+          <div>عدد العناصر: <span id="itemsCount">0</span></div>
+          <div>الإجمالي الكلي: <strong id="invoiceTotal">0.00</strong> جنيه</div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button class="btn btn-main" id="btnSaveInvoice">حفظ الفاتورة</button>
+          <button class="btn btn-ghost" id="btnPrintInvoice">طباعة</button>
+          <button class="btn btn-ghost" id="btnNewInvoice">فاتورة جديدة</button>
+          <div class="print-note">عند الطباعة سيتم إخفاء الشاشات الأخرى وترك الفاتورة فقط للطباعة بشكل منظم.</div>
+        </div>
+
+        <div class="signature-box">
+          <div>توقيع المسؤول:</div>
+          <div class="signature-name">أسامة الشرقاوي</div>
+          <div class="signature-phone">هاتف المحل: 01288832055</div>
+        </div>
+      </section>
+
+      <!-- سجل الفواتير -->
+      <section id="historySection" class="hidden">
+        <div class="sec-title">
+          سجل الفواتير
+          <span class="badge">متابعة الطلبات السابقة</span>
+        </div>
+        <p class="sec-sub">ابحث باسم العميل أو رقم الفاتورة لعرض تفاصيل أي فاتورة سابقة.</p>
+
+        <div class="row">
+          <div class="search-wrap">
+            <label for="historySearch">بحث في السجل</label>
+            <input id="historySearch" type="text" placeholder="اسم عميل أو رقم فاتورة">
+          </div>
+        </div>
+
+        <div class="history-list" id="historyList"></div>
+
+        <div class="table-wrap" style="margin-top:10px;">
+          <table>
+            <thead>
+              <tr>
+                <th>كود</th>
+                <th>البيان</th>
+                <th>السعر</th>
+                <th>الكمية</th>
+                <th>الإجمالي</th>
+              </tr>
+            </thead>
+            <tbody id="historyDetails"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const PRODUCTS_KEY = "SH_PRODUCTS";
+    const INVOICES_KEY = "SH_INVOICES";
+    const LAST_NO_KEY = "SH_LAST_INVOICE_NO";
+
+    let products = JSON.parse(localStorage.getItem(PRODUCTS_KEY) || "[]").map(p=>({
+      code:p.code,
+      name:p.name,
+      price:p.price,
+      stock: p.stock != null ? p.stock : 0
+    }));
+    let invoices = JSON.parse(localStorage.getItem(INVOICES_KEY) || "[]");
+    let currentInvoiceItems = [];
+    let currentInvoiceNo = getNextInvoiceNumber();
+
+    function saveProducts(){ localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products)); }
+    function saveInvoices(){ localStorage.setItem(INVOICES_KEY, JSON.stringify(invoices)); }
+    function saveLastInvoiceNo(no){ localStorage.setItem(LAST_NO_KEY, String(no)); }
+    function getNextInvoiceNumber(){
+      const last = parseInt(localStorage.getItem(LAST_NO_KEY) || "0", 10) || 0;
+      return last + 1;
+    }
+    function formatCurrency(v){ return Number(v || 0).toFixed(2); }
+    function todayStr(){ return new Date().toLocaleDateString("ar-EG"); }
+
+    document.querySelectorAll(".nav-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        const target = btn.dataset.target;
+        document.querySelectorAll("main section").forEach(sec=>sec.classList.add("hidden"));
+        document.getElementById(target).classList.remove("hidden");
+      });
+    });
+
+    const pCode = document.getElementById("pCode");
+    const pName = document.getElementById("pName");
+    const pPrice = document.getElementById("pPrice");
+    const pStock = document.getElementById("pStock");
+    const pSearch = document.getElementById("pSearch");
+    const productsTableBody = document.getElementById("productsTableBody");
+
+    function renderProducts(){
+      const term = pSearch.value.trim().toLowerCase();
+      productsTableBody.innerHTML = "";
+      products
+        .filter(p =>
+          !term ||
+          p.code.toLowerCase().includes(term) ||
+          p.name.toLowerCase().includes(term)
+        )
+        .forEach(p=>{
+          const stock = p.stock != null ? p.stock : 0;
+          let stockCell = stock;
+          if (stock <= 3){
+            stockCell = `${stock} 🔥`;
+          }
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><span class="tag">${p.code}</span></td>
+            <td>${p.name}</td>
+            <td>${stockCell}</td>
+            <td>${formatCurrency(p.price)}</td>
+            <td>
+              <button class="btn btn-ghost" data-edit="${p.code}">تعديل</button>
+              <button class="btn btn-danger" data-del="${p.code}">حذف</button>
+            </td>
+          `;
+          productsTableBody.appendChild(tr);
+        });
+    }
+
+    document.getElementById("btnSaveProduct").addEventListener("click",()=>{
+      const code = pCode.value.trim();
+      const name = pName.value.trim();
+      const price = parseFloat(pPrice.value);
+      let stock = parseInt(pStock.value || "0",10);
+
+      if(!code || !name || isNaN(price) || stock < 0){
+        alert("من فضلك أدخل الكود والاسم والسعر والكمية بشكل صحيح.");
+        return;
+      }
+
+      const existingIndex = products.findIndex(p=>p.code===code);
+      if(existingIndex >= 0){
+        products[existingIndex] = {code,name,price,stock};
+      }else{
+        products.push({code,name,price,stock});
+      }
+      saveProducts();
+      renderProducts();
+      clearProductForm();
+    });
+
+    function clearProductForm(){
+      pCode.value = "";
+      pName.value = "";
+      pPrice.value = "";
+      pStock.value = "";
+    }
+    document.getElementById("btnClearProduct").addEventListener("click",clearProductForm);
+    pSearch.addEventListener("input",renderProducts);
+
+    productsTableBody.addEventListener("click",(e)=>{
+      const editCode = e.target.dataset.edit;
+      const delCode = e.target.dataset.del;
+      if(editCode){
+        const p = products.find(pr=>pr.code===editCode);
+        if(p){
+          pCode.value = p.code;
+          pName.value = p.name;
+          pPrice.value = p.price;
+          pStock.value = p.stock != null ? p.stock : 0;
+        }
+      }
+      if(delCode){
+        if(confirm("هل تريد حذف هذا الصنف؟")){
+          products = products.filter(p=>p.code!==delCode);
+          saveProducts();
+          renderProducts();
+        }
+      }
+    });
+
+    const invoiceNoSpan = document.getElementById("invoiceNo");
+    const invoiceDateSpan = document.getElementById("invoiceDate");
+    const invCodeInput = document.getElementById("invCode");
+    const invSearchInput = document.getElementById("invSearch");
+    const customerNameInput = document.getElementById("customerName");
+    const customerPhoneInput = document.getElementById("customerPhone");
+    const invoiceNotesInput = document.getElementById("invoiceNotes");
+    const metaCustName = document.getElementById("metaCustName");
+    const metaCustPhone = document.getElementById("metaCustPhone");
+    const metaNotes = document.getElementById("metaNotes");
+    const invoiceTableBody = document.getElementById("invoiceTableBody");
+    const itemsCountSpan = document.getElementById("itemsCount");
+    const invoiceTotalSpan = document.getElementById("invoiceTotal");
+
+    function updateInvoiceMeta(){
+      metaCustName.textContent = customerNameInput.value.trim() || "-";
+      metaCustPhone.textContent = customerPhoneInput.value.trim() || "-";
+      metaNotes.textContent = invoiceNotesInput.value.trim() || "-";
+    }
+
+    customerNameInput.addEventListener("input", updateInvoiceMeta);
+    customerPhoneInput.addEventListener("input", updateInvoiceMeta);
+    invoiceNotesInput.addEventListener("input", updateInvoiceMeta);
+
+    function initInvoice(){
+      currentInvoiceItems = [];
+      currentInvoiceNo = getNextInvoiceNumber();
+      invoiceNoSpan.textContent = currentInvoiceNo;
+      invoiceDateSpan.textContent = todayStr();
+      customerNameInput.value = "";
+      customerPhoneInput.value = "";
+      invoiceNotesInput.value = "";
+      invCodeInput.value = "";
+      invSearchInput.value = "";
+      updateInvoiceMeta();
+      renderInvoiceItems();
+    }
+
+    function getProductStock(code){
+      const p = products.find(pr=>pr.code===code);
+      return p ? (p.stock != null ? p.stock : 0) : 0;
+    }
+
+    function getInvoiceQtyForCode(code){
+      return currentInvoiceItems
+        .filter(i=>i.code===code)
+        .reduce((sum,i)=>sum + i.qty,0);
+    }
+
+    function addProductToInvoiceByCode(code){
+      if(!code) return;
+      const p = products.find(pr=>pr.code === code);
+      if(!p){
+        alert("لا يوجد صنف بهذا الكود في المخزون.");
+        return;
+      }
+      const stock = p.stock != null ? p.stock : 0;
+      if(stock <= 0){
+        alert("المخزون لهذا الصنف صفر.");
+        return;
+      }
+      const alreadyQty = getInvoiceQtyForCode(code);
+      if(alreadyQty >= stock){
+        alert("لا يمكن إضافة كمية أكثر من المخزون المتاح.");
+        return;
+      }
+      const existing = currentInvoiceItems.find(item=>item.code===code);
+      if(existing){
+        const newQty = existing.qty + 1;
+        if(newQty > stock){
+          existing.qty = stock;
+          alert("تم ضبط الكمية على حد المخزون المتاح.");
+        }else{
+          existing.qty = newQty;
+        }
+      }else{
+        currentInvoiceItems.push({ code:p.code, name:p.name, price:p.price, qty:1 });
+      }
+      renderInvoiceItems();
+    }
+
+    function renderInvoiceItems(){
+      const term = invSearchInput.value.trim().toLowerCase();
+      invoiceTableBody.innerHTML = "";
+      let total = 0;
+      let count = 0;
+
+      currentInvoiceItems
+        .filter(item =>
+          !term ||
+          item.code.toLowerCase().includes(term) ||
+          item.name.toLowerCase().includes(term)
+        )
+        .forEach(item=>{
+          const rowTotal = item.price * item.qty;
+          total += rowTotal;
+          count += item.qty;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${item.code}</td>
+            <td>${item.name}</td>
+            <td>
+              <span class="print-only">${formatCurrency(item.price)}</span>
+              <input class="screen-only" type="number" data-code="${item.code}" data-field="price" min="0" step="0.01" value="${item.price}">
+            </td>
+            <td>
+              <span class="print-only">${item.qty}</span>
+              <input class="screen-only" type="number" data-code="${item.code}" data-field="qty" min="1" step="1" value="${item.qty}">
+            </td>
+            <td>${formatCurrency(rowTotal)}</td>
+            <td>
+              <button class="btn btn-danger screen-only" data-remove="${item.code}">✕</button>
+            </td>
+          `;
+          invoiceTableBody.appendChild(tr);
+        });
+
+      itemsCountSpan.textContent = count;
+      invoiceTotalSpan.textContent = formatCurrency(total);
+    }
+
+    document.getElementById("btnAddToInvoice").addEventListener("click",()=>{
+      const code = invCodeInput.value.trim();
+      addProductToInvoiceByCode(code);
+      invCodeInput.value = "";
+      invCodeInput.focus();
+    });
+    invCodeInput.addEventListener("keydown",(e)=>{
+      if(e.key==="Enter"){
+        e.preventDefault();
+        document.getElementById("btnAddToInvoice").click();
+      }
+    });
+
+    invSearchInput.addEventListener("input",renderInvoiceItems);
+
+    invoiceTableBody.addEventListener("input",(e)=>{
+      const code = e.target.dataset.code;
+      const field = e.target.dataset.field;
+      if(!code || !field) return;
+      const item = currentInvoiceItems.find(i=>i.code===code);
+      if(!item) return;
+      let val = parseFloat(e.target.value);
+      if(field === "qty"){
+        if(isNaN(val) || val <= 0) val = 1;
+        const stock = getProductStock(code);
+        if(val > stock){
+          alert("لا يمكن وضع كمية أكبر من المخزون المتاح.");
+          val = stock > 0 ? stock : 1;
+        }
+      }else{
+        if(isNaN(val) || val < 0) val = 0;
+      }
+      item[field] = val;
+      e.target.value = val;
+      renderInvoiceItems();
+    });
+
+    invoiceTableBody.addEventListener("click",(e)=>{
+      const code = e.target.dataset.remove;
+      if(code){
+        currentInvoiceItems = currentInvoiceItems.filter(i=>i.code!==code);
+        renderInvoiceItems();
+      }
+    });
+
+    document.getElementById("btnSaveInvoice").addEventListener("click",()=>{
+      if(currentInvoiceItems.length === 0){
+        alert("لا توجد أصناف في الفاتورة.");
+        return;
+      }
+      const customerName = customerNameInput.value.trim() || "عميل نقدي";
+      const customerPhone = customerPhoneInput.value.trim();
+      const notes = invoiceNotesInput.value.trim();
+      const total = parseFloat(invoiceTotalSpan.textContent) || 0;
+
+      // تحقق المخزون قبل الحفظ
+      for(const item of currentInvoiceItems){
+        if(!item.code) continue;
+        const p = products.find(pr=>pr.code===item.code);
+        const stock = p ? (p.stock != null ? p.stock : 0) : 0;
+        if(item.qty > stock){
+          alert("كمية " + item.name + " أكبر من المخزون. عدّلي الكمية أولاً.");
+          return;
+        }
+      }
+
+      const invoiceObj = {
+        no: currentInvoiceNo,
+        date: invoiceDateSpan.textContent,
+        customerName,
+        customerPhone,
+        notes,
+        items: currentInvoiceItems.map(i=>({...i})),
+        total
+      };
+
+      invoices.push(invoiceObj);
+      saveInvoices();
+      saveLastInvoiceNo(currentInvoiceNo);
+
+      // خصم الكميات من المخزون
+      currentInvoiceItems.forEach(item=>{
+        if(!item.code) return;
+        const p = products.find(pr=>pr.code===item.code);
+        if(p){
+          const stock = p.stock != null ? p.stock : 0;
+          p.stock = Math.max(0, stock - item.qty);
+        }
+      });
+      saveProducts();
+      renderProducts();
+
+      alert("تم حفظ الفاتورة وتحديث المخزون بنجاح.");
+      renderHistory();
+      initInvoice();
+    });
+
+    document.getElementById("btnPrintInvoice").addEventListener("click",()=>{
+      if(currentInvoiceItems.length === 0){
+        alert("لا توجد أصناف للطباعة.");
+        return;
+      }
+      window.print();
+    });
+
+    document.getElementById("btnNewInvoice").addEventListener("click",initInvoice);
+
+    const historyList = document.getElementById("historyList");
+    const historyDetails = document.getElementById("historyDetails");
+    const historySearch = document.getElementById("historySearch");
+
+    function renderHistory(){
+      const term = historySearch.value.trim().toLowerCase();
+      historyList.innerHTML = "";
+      invoices
+        .slice()
+        .reverse()
+        .filter(inv =>
+          !term ||
+          String(inv.no).includes(term) ||
+          (inv.customerName && inv.customerName.toLowerCase().includes(term))
+        )
+        .forEach(inv=>{
+          const div = document.createElement("div");
+          div.className = "history-item";
+          div.dataset.no = inv.no;
+          div.innerHTML = `
+            <div><strong>#${inv.no}</strong> – ${inv.customerName || "عميل"} – ${formatCurrency(inv.total)} ج</div>
+            <div style="font-size:11px;color:var(--muted);">تاريخ: ${inv.date} | هاتف: ${inv.customerPhone || "-"}</div>
+          `;
+          historyList.appendChild(div);
+        });
+      historyDetails.innerHTML = "";
+    }
+
+    historyList.addEventListener("click",(e)=>{
+      const item = e.target.closest(".history-item");
+      if(!item) return;
+      const no = Number(item.dataset.no);
+      const inv = invoices.find(i=>i.no === no);
+      if(!inv) return;
+      historyDetails.innerHTML = "";
+      inv.items.forEach(it=>{
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${it.code}</td>
+          <td>${it.name}</td>
+          <td>${formatCurrency(it.price)}</td>
+          <td>${it.qty}</td>
+          <td>${formatCurrency(it.price * it.qty)}</td>
+        `;
+        historyDetails.appendChild(tr);
+      });
+    });
+
+    historySearch.addEventListener("input",renderHistory);
+
+    renderProducts();
+    renderHistory();
+    initInvoice();
+  </script>
+</body>
+</html>
